@@ -14,11 +14,16 @@
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
             rel="stylesheet">
+
+            <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/starability/2.4.2/starability-css/starability-all.css">
+
 </head>
 <body>
   <%- include("../includes/navbar.ejs") %>
 
     <div class="container">
+      <%- include("../includes/flash.ejs") %>
           <%- body %> 
     </div>
     
@@ -29,6 +34,7 @@
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
         crossorigin="anonymous">
         </script>
+        
       <script src="/js/script.js"> </script>
 </body>
 </html>
