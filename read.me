@@ -1,0 +1,17 @@
+🧑 User types in the search bar → submits form
+
+🌐 Browser sends GET request → /listings?q=beach
+
+🧩 Server reads req.query.q
+
+💾 MongoDB finds matching titles using regex
+
+🎨 EJS renders the matching results
+
+$regex stands for Regular Expression.
+
+It lets MongoDB search for partial text matches — not just exact matches.
+
+The "i" means case-insensitive search (ignore uppercase/lowercase).
+
+Without "i", MongoDB will only match exact case.    

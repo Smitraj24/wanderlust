@@ -14,3 +14,5 @@ module.exports = (fn) => {
         fn(req, res, next).catch(next);
     };
 };
+
+//It automatically catches errors from async route functions and sends them to Express error middleware.
