@@ -2,7 +2,7 @@ if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
 
-// console.log(process.env);
+//console.log(process.env);
 
 const express = require("express");
 const app = express();
@@ -25,6 +25,7 @@ const userRouter = require("./routes/user.js");
 const { Session } = require("inspector/promises");
 
 const dbUrl = process.env.MONGO_URL;
+const PORT = process.env.PORT || 8080;
 
 main()
   .then(() => {
@@ -61,11 +62,11 @@ const store = MongoStore.create({
     secret: process.env.SECRET,
   }),
   touchAfter: 24 * 3600,
-})
+});
 
-store.on("error" , () => {
-  console.log("Error in MONGO STORE" , err);
-}); 
+store.on("error", (err) => {
+  console.log("Error in MONGO STORE", err);
+});
 
 const sessionOptions = {
   store,
@@ -83,8 +84,6 @@ const sessionOptions = {
     res.send("Hi , I am root"); 
 }) ;
 */
-
-
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -132,11 +131,10 @@ app.use(handleNotFound);
 
 //middleware
 app.use((err, req, res, next) => {
+  console.log(" ERROR:", err); //
   let { statusCode = 500, message = "Something Went wrong!" } = err;
   res.status(statusCode).render("error.ejs", { message });
 });
-
-const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
