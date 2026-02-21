@@ -1,0 +1,57 @@
+<% layout("admin/layout") %>
+
+<h2 class="admin-page-title mb-4"><i class="fa-solid fa-plus me-2 text-danger"></i>Create New Listing</h2>
+
+<div class="card admin-card border-0">
+  <div class="card-body p-4">
+    <form method="POST" action="/admin/listings" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="title" class="form-label">Title</label>
+          <input name="listing[title]" id="title" placeholder="Add a catchy title" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="listing[description]" id="description" class="form-control" rows="4" required></textarea>
+        </div>
+        <div class="col-12">
+          <label for="image" class="form-label">Image</label>
+          <input name="listing[image][url]" id="image" type="file" class="form-control" accept="image/*" required />
+        </div>
+        <div class="col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input name="listing[price]" id="price" placeholder="1200" type="number" class="form-control" required />
+        </div>
+        <div class="col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input name="listing[country]" id="country" placeholder="India" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="location" class="form-label">Location</label>
+          <input name="listing[location]" id="location" placeholder="Jaipur, Rajasthan" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="category" class="form-label">Category</label>
+          <select name="listing[category]" id="category" class="form-select" required>
+            <option value="">-- Select Category --</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Rooms</option>
+            <option value="iconic">Iconic Cities</option>
+            <option value="mountains">Mountains</option>
+            <option value="castles">Castles</option>
+            <option value="pools">Amazing Pools</option>
+            <option value="camping">Camping</option>
+            <option value="farms">Farms</option>
+            <option value="arctic">Arctic</option>
+            <option value="domes">Domes</option>
+            <option value="boats">Boats</option>
+          </select>
+        </div>
+        <div class="col-12 pt-2">
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-check me-1"></i>Create Listing</button>
+          <a href="/admin/listings" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

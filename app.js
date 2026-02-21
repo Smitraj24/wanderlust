@@ -22,6 +22,9 @@ const User = require("./models/user.js");
 const listingRouter = require("./routes/listing.js");
 const reviewRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
+const wishlistRouter = require("./routes/wishlist.js");
+const cartRouter = require("./routes/cart.js");
+const adminRouter = require("./admin/routes/admin.js");
 const { Session } = require("inspector/promises");
 
 const dbUrl = process.env.MONGO_URL;
@@ -98,7 +101,9 @@ passport.deserializeUser(User.deserializeUser()); //unstore information
 app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
-  res.locals.currUser = req.user; // current user information  use for navbar in req.user directly nit work so use store in local variable
+  res.locals.currUser = req.user;
+  res.locals.wishlistCount = req.user?.wishlist?.length || 0;
+  res.locals.cartCount = req.user?.cart?.length || 0;
   next();
 });
 
@@ -116,6 +121,9 @@ app.get("/demouser", async(req,res) => {
 
 app.use("/listings", listingRouter);
 app.use("/listings/:id/reviews", reviewRouter);
+app.use("/wishlist", wishlistRouter);
+app.use("/cart", cartRouter);
+app.use("/admin", adminRouter);
 app.use("/", userRouter);
 
 // Your routes go above this

@@ -1,0 +1,51 @@
+<% layout("admin/layout") %>
+
+<h2 class="admin-page-title mb-4"><i class="fa-solid fa-users me-2 text-primary"></i>All Users</h2>
+
+<div class="table-responsive admin-table rounded-3">
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Email</th>
+        <th style="width:100px">Role</th>
+        <th style="width:120px">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (users.length === 0) { %>
+        <tr>
+          <td colspan="4" class="text-center py-5 text-muted">
+            <i class="fa-solid fa-users fa-3x mb-3 opacity-25"></i>
+            <p class="mb-0">No users found.</p>
+          </td>
+        </tr>
+      <% } else { %>
+        <% for (let u of users) { %>
+          <tr>
+            <td><strong><%= u.username %></strong></td>
+            <td><%= u.email %></td>
+            <td>
+              <% if (u.isAdmin) { %>
+                <span class="badge bg-danger">Admin</span>
+              <% } else { %>
+                <span class="badge bg-secondary">User</span>
+              <% } %>
+            </td>
+            <td>
+              <% if (!u.isAdmin && (!currUser || !currUser._id.equals(u._id))) { %>
+                <form method="POST" action="/admin/users/<%= u._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Delete this user and their listings/reviews?');">
+                  <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash me-1"></i>Delete</button>
+                </form>
+              <% } else if (currUser && currUser._id.equals(u._id)) { %>
+                <span class="badge bg-light text-dark border">You</span>
+              <% } else { %>
+                <span class="text-muted">—</span>
+              <% } %>
+            </td>
+          </tr>
+        <% } %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

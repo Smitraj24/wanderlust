@@ -21,10 +21,6 @@
         font-size: 0.8rem;
     }
 
-    .tax-info{
-        display: none;
-    }
-
     .text-toggle{
         border: 1px solid black;
         border-radius: 1rem;
@@ -117,33 +113,35 @@
   <div class="row g-4">
 
     <% for(let listing of listings) { %>
+      <% const lid = listing._id.toString(); const inWishlist = typeof wishlistIds !== 'undefined' && wishlistIds.includes(lid); const inCart = typeof cartIds !== 'undefined' && cartIds.includes(lid); %>
       <div class="col-lg-4 col-md-6 col-sm-12">
-        <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
-
-          <div class="modern-card">
-
-            <!-- IMAGE -->
+        <div class="modern-card position-relative">
+          <% if(currUser) { %>
+          <div class="listing-actions position-absolute top-0 end-0 p-2 d-flex gap-1" style="z-index:5">
+            <form method="POST" action="/wishlist/<%= listing._id %>" class="d-inline">
+              <button type="submit" class="btn btn-sm rounded-circle p-2" style="background:rgba(255,255,255,0.9);" title="<%= inWishlist ? 'Remove from wishlist' : 'Add to wishlist' %>">
+                <i class="fa-<%= inWishlist ? 'solid' : 'regular' %> fa-heart text-danger"></i>
+              </button>
+            </form>
+            <form method="POST" action="/cart/<%= listing._id %>" class="d-inline">
+              <button type="submit" class="btn btn-sm rounded-circle p-2" style="background:rgba(255,255,255,0.9);" title="<%= inCart ? 'Remove from cart' : 'Add to cart' %>">
+                <i class="fa-solid fa-cart-shopping <%= inCart ? 'text-danger' : '' %>"></i>
+              </button>
+            </form>
+          </div>
+          <% } %>
+          <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
             <div class="image-wrapper">
-              <img 
-                src="<%= listing.image.url %>" 
-                alt="listing_image">
+              <img src="<%= listing.image.url %>" alt="listing_image">
             </div>
-
-            <!-- INFO -->
             <div class="card-info">
-              <h5 class="listing-title">
-                <%= listing.title %>
-              </h5>
-
-              <p class="listing-price">
-                ₹ <%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "N/A" %>
-                <span class="tax-info"> +18% GST</span>
+              <h5 class="listing-title"><%= listing.title %></h5>
+              <p class="listing-price" data-base-price="<%= listing.price || 0 %>">
+                <span class="price-display">₹ <%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "N/A" %></span>
               </p>
             </div>
-
-          </div>
-
-        </a>
+          </a>
+        </div>
       </div>
     <% } %>
 
@@ -157,20 +155,26 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let taxSwitch = document.getElementById("switchCheckDefault"); 
+        const taxSwitch = document.getElementById("switchCheckDefault"); 
+        const priceElements = document.querySelectorAll(".listing-price");
 
-        taxSwitch.addEventListener("click", () => {
-            let taxInfo = document.getElementsByClassName("tax-info");
-            console.log("clicked");
-
-            for (let info of taxInfo) {
-                let currentDisplay = window.getComputedStyle(info).display;
-                if (currentDisplay === "none") {
-                    info.style.display = "inline";
-                } else {
-                    info.style.display = "none";
+        taxSwitch.addEventListener("change", () => {
+            const showAfterGst = taxSwitch.checked;
+            priceElements.forEach(el => {
+                const basePrice = parseFloat(el.getAttribute("data-base-price")) || 0;
+                const priceSpan = el.querySelector(".price-display");
+                if (!priceSpan) return;
+                if (basePrice === 0) {
+                    priceSpan.textContent = "₹ N/A";
+                    return;
                 }
-            }
+                if (showAfterGst) {
+                    const priceWithGst = Math.round(basePrice * 1.18);
+                    priceSpan.textContent = "₹ " + priceWithGst.toLocaleString("en-IN") + " (incl. 18% GST)";
+                } else {
+                    priceSpan.textContent = "₹ " + basePrice.toLocaleString("en-IN");
+                }
+            });
         });
     });
 </script>

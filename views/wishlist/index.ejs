@@ -1,0 +1,42 @@
+<% layout("/layouts/boilerplate") %>
+
+<div class="mt-4">
+  <h3 class="mb-4"><i class="fa-solid fa-heart text-danger me-2"></i>My Wishlist</h3>
+  <% if (listings.length === 0) { %>
+    <div class="text-center py-5 text-muted">
+      <i class="fa-regular fa-heart fa-4x mb-3 opacity-50"></i>
+      <p class="fs-5">Your wishlist is empty.</p>
+      <a href="/listings" class="btn btn-danger">Explore Listings</a>
+    </div>
+  <% } else { %>
+    <div class="row g-4">
+      <% for (let listing of listings) { %>
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="modern-card position-relative">
+            <div class="listing-actions position-absolute top-0 end-0 p-2" style="z-index:5">
+              <form method="POST" action="/wishlist/<%= listing._id %>" class="d-inline">
+                <button type="submit" class="btn btn-sm rounded-circle p-2" style="background:rgba(255,255,255,0.9);" title="Remove from wishlist">
+                  <i class="fa-solid fa-heart text-danger"></i>
+                </button>
+              </form>
+              <form method="POST" action="/cart/<%= listing._id %>" class="d-inline">
+                <button type="submit" class="btn btn-sm rounded-circle p-2" style="background:rgba(255,255,255,0.9);" title="Add to cart">
+                  <i class="fa-solid fa-cart-shopping"></i>
+                </button>
+              </form>
+            </div>
+            <a href="/listings/<%= listing._id %>" class="text-decoration-none text-dark">
+              <div class="image-wrapper">
+                <img src="<%= listing.image?.url || '#' %>" alt="listing">
+              </div>
+              <div class="card-info">
+                <h5 class="listing-title"><%= listing.title %></h5>
+                <p class="listing-price">₹ <%= listing.price ? Number(listing.price).toLocaleString("en-IN") : "N/A" %></p>
+              </div>
+            </a>
+          </div>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+</div>

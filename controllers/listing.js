@@ -13,12 +13,16 @@ module.exports.index = async (req, res) => {
 
   const listings = await Listing.find(filter);
   const allListings = await Listing.find({});
+  const wishlistIds = (req.user?.wishlist || []).map((id) => id.toString());
+  const cartIds = (req.user?.cart || []).map((id) => id.toString());
 
   res.render("listings/index.ejs", {
     listings,
     allListings,
     searchQuery,
     category,
+    wishlistIds,
+    cartIds,
   });
 };
 
@@ -36,8 +40,9 @@ module.exports.showListing = async (req, res) => {
     req.flash("error", "Listing requested for does not exists! ");
     return res.redirect("/listings");
   }
-  console.log(listing);
-  res.render("listings/show.ejs", { listing });
+  const inWishlist = req.user && (req.user.wishlist || []).some((w) => w.toString() === listing._id.toString());
+  const inCart = req.user && (req.user.cart || []).some((c) => c.toString() === listing._id.toString());
+  res.render("listings/show.ejs", { listing, inWishlist, inCart });
 };
 
 module.exports.createListing = async (req, res, next) => {

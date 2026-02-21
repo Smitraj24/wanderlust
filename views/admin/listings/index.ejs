@@ -1,0 +1,89 @@
+<% layout("admin/layout") %>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <h2 class="admin-page-title mb-0"><i class="fa-solid fa-list me-2 text-danger"></i>All Listings</h2>
+  <a href="/admin/listings/new" class="btn btn-danger"><i class="fa-solid fa-plus me-1"></i>Create Listing</a>
+</div>
+
+<div class="card admin-card border-0 mb-4">
+  <div class="card-body p-3">
+    <form action="/admin/listings" method="GET" class="row g-2 align-items-end">
+      <div class="col-md-5">
+        <label class="form-label small text-muted mb-0">Search by title</label>
+        <input class="form-control" type="search" name="q" placeholder="Search listings..." value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>" />
+      </div>
+      <div class="col-md-4">
+        <label class="form-label small text-muted mb-0">Category filter</label>
+        <select name="category" class="form-select">
+          <option value="">All categories</option>
+          <option value="trending" <%= category === 'trending' ? 'selected' : '' %>>Trending</option>
+          <option value="rooms" <%= category === 'rooms' ? 'selected' : '' %>>Rooms</option>
+          <option value="iconic" <%= category === 'iconic' ? 'selected' : '' %>>Iconic Cities</option>
+          <option value="mountains" <%= category === 'mountains' ? 'selected' : '' %>>Mountains</option>
+          <option value="castles" <%= category === 'castles' ? 'selected' : '' %>>Castles</option>
+          <option value="pools" <%= category === 'pools' ? 'selected' : '' %>>Amazing Pools</option>
+          <option value="camping" <%= category === 'camping' ? 'selected' : '' %>>Camping</option>
+          <option value="farms" <%= category === 'farms' ? 'selected' : '' %>>Farms</option>
+          <option value="arctic" <%= category === 'arctic' ? 'selected' : '' %>>Arctic</option>
+          <option value="domes" <%= category === 'domes' ? 'selected' : '' %>>Domes</option>
+          <option value="boats" <%= category === 'boats' ? 'selected' : '' %>>Boats</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button type="submit" class="btn btn-dark w-100"><i class="fa-solid fa-magnifying-glass me-1"></i>Search</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="table-responsive admin-table rounded-3">
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th style="width:70px">Image</th>
+        <th>Title</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Owner</th>
+        <th style="width:180px">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (listings.length === 0) { %>
+        <tr>
+          <td colspan="6" class="text-center py-5 text-muted">
+            <i class="fa-solid fa-inbox fa-3x mb-3 opacity-25"></i>
+            <p class="mb-0">No listings found.</p>
+          </td>
+        </tr>
+      <% } else { %>
+        <% for (let l of listings) { %>
+          <tr>
+            <td>
+              <% if (l.image && l.image.url) { %>
+                <img src="<%= l.image.url %>" alt="" class="rounded" style="width:50px;height:50px;object-fit:cover;">
+              <% } else { %>
+                <div class="rounded bg-secondary bg-opacity-25 d-flex align-items-center justify-content-center" style="width:50px;height:50px;">
+                  <i class="fa-solid fa-image text-muted"></i>
+                </div>
+              <% } %>
+            </td>
+            <td><strong><%= l.title %></strong></td>
+            <td><span class="badge bg-secondary"><%= l.category || '—' %></span></td>
+            <td>₹ <%= l.price ? Number(l.price).toLocaleString('en-IN') : 'N/A' %></td>
+            <td><%= l.owner ? l.owner.username : '—' %></td>
+            <td>
+              <div class="btn-group btn-group-sm">
+                <a href="/admin/listings/<%= l._id %>" class="btn btn-outline-primary" title="View"><i class="fa-solid fa-eye"></i></a>
+                <a href="/admin/listings/<%= l._id %>/edit" class="btn btn-outline-secondary" title="Edit"><i class="fa-solid fa-pen"></i></a>
+                <form method="POST" action="/admin/listings/<%= l._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Delete this listing?');">
+                  <button type="submit" class="btn btn-outline-danger" title="Delete"><i class="fa-solid fa-trash"></i></button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        <% } %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

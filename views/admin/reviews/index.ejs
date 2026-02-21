@@ -1,0 +1,47 @@
+<% layout("admin/layout") %>
+
+<h2 class="admin-page-title mb-4"><i class="fa-solid fa-star me-2 text-warning"></i>All Reviews</h2>
+
+<div class="table-responsive admin-table rounded-3">
+  <table class="table mb-0">
+    <thead>
+      <tr>
+        <th>Author</th>
+        <th style="width:90px">Rating</th>
+        <th>Comment</th>
+        <th>Listing</th>
+        <th style="width:100px">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (reviews.length === 0) { %>
+        <tr>
+          <td colspan="5" class="text-center py-5 text-muted">
+            <i class="fa-solid fa-star fa-3x mb-3 opacity-25"></i>
+            <p class="mb-0">No reviews found.</p>
+          </td>
+        </tr>
+      <% } else { %>
+        <% for (let r of reviews) { %>
+          <tr>
+            <td><strong><%= r.author ? r.author.username : '—' %></strong></td>
+            <td><span class="badge bg-warning text-dark"><%= r.rating %> ★</span></td>
+            <td class="text-muted" style="max-width:300px"><%= (r.comment || '').slice(0, 100) %><%= (r.comment && r.comment.length > 100) ? '…' : '' %></td>
+            <td>
+              <% if (r.listingRef) { %>
+                <a href="/admin/listings/<%= r.listingRef._id %>" class="text-decoration-none"><%= r.listingRef.title %></a>
+              <% } else { %>
+                <span class="text-muted">—</span>
+              <% } %>
+            </td>
+            <td>
+              <form method="POST" action="/admin/reviews/<%= r._id %>?_method=DELETE" class="d-inline" onsubmit="return confirm('Delete this review?');">
+                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash me-1"></i>Delete</button>
+              </form>
+            </td>
+          </tr>
+        <% } %>
+      <% } %>
+    </tbody>
+  </table>
+</div>

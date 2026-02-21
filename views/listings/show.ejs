@@ -32,6 +32,23 @@
 
     <br>
 
+    <% if(currUser) { %>
+      <div class="d-flex gap-2 mb-3">
+        <form method="POST" action="/wishlist/<%= listing._id %>" class="d-inline">
+          <button type="submit" class="btn btn-outline-danger">
+            <i class="fa-<%= inWishlist ? 'solid' : 'regular' %> fa-heart me-1"></i>
+            <%= inWishlist ? 'Remove from Wishlist' : 'Add to Wishlist' %>
+          </button>
+        </form>
+        <form method="POST" action="/cart/<%= listing._id %>" class="d-inline">
+          <button type="submit" class="btn btn-danger">
+            <i class="fa-solid fa-cart-shopping me-1"></i>
+            <%= inCart ? 'Remove from Cart' : 'Add to Cart' %>
+          </button>
+        </form>
+      </div>
+    <% } %>
+
     <% if(currUser && listing.owner && currUser._id.equals(listing.owner._id)) { %>
       <div class="btns">
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>

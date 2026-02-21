@@ -1,0 +1,62 @@
+<% layout("admin/layout") %>
+
+<h2 class="admin-page-title mb-4"><i class="fa-solid fa-pen me-2 text-danger"></i>Edit Listing</h2>
+
+<div class="card admin-card border-0">
+  <div class="card-body p-4">
+    <form method="POST" action="/admin/listings/<%= listing._id %>?_method=PUT" enctype="multipart/form-data" class="needs-validation" novalidate>
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="title" class="form-label">Title</label>
+          <input name="listing[title]" id="title" value="<%= listing.title %>" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="description" class="form-label">Description</label>
+          <textarea name="listing[description]" id="description" class="form-control" rows="4" required><%= listing.description %></textarea>
+        </div>
+        <% if (originalImageUrl) { %>
+          <div class="col-12">
+            <label class="form-label">Current Image</label>
+            <div><img src="<%= originalImageUrl %>" alt="" class="rounded" style="max-width:200px;"/></div>
+          </div>
+        <% } %>
+        <div class="col-12">
+          <label for="image" class="form-label">New Image (optional)</label>
+          <input name="listing[image][url]" id="image" type="file" class="form-control" accept="image/*" />
+        </div>
+        <div class="col-md-4">
+          <label for="price" class="form-label">Price</label>
+          <input name="listing[price]" id="price" value="<%= listing.price %>" type="number" class="form-control" required />
+        </div>
+        <div class="col-md-8">
+          <label for="country" class="form-label">Country</label>
+          <input name="listing[country]" id="country" value="<%= listing.country %>" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="location" class="form-label">Location</label>
+          <input name="listing[location]" id="location" value="<%= listing.location %>" type="text" class="form-control" required />
+        </div>
+        <div class="col-12">
+          <label for="category" class="form-label">Category</label>
+          <select name="listing[category]" id="category" class="form-select" required>
+            <option value="trending" <%= listing.category === 'trending' ? 'selected' : '' %>>Trending</option>
+            <option value="rooms" <%= listing.category === 'rooms' ? 'selected' : '' %>>Rooms</option>
+            <option value="iconic" <%= listing.category === 'iconic' ? 'selected' : '' %>>Iconic Cities</option>
+            <option value="mountains" <%= listing.category === 'mountains' ? 'selected' : '' %>>Mountains</option>
+            <option value="castles" <%= listing.category === 'castles' ? 'selected' : '' %>>Castles</option>
+            <option value="pools" <%= listing.category === 'pools' ? 'selected' : '' %>>Amazing Pools</option>
+            <option value="camping" <%= listing.category === 'camping' ? 'selected' : '' %>>Camping</option>
+            <option value="farms" <%= listing.category === 'farms' ? 'selected' : '' %>>Farms</option>
+            <option value="arctic" <%= listing.category === 'arctic' ? 'selected' : '' %>>Arctic</option>
+            <option value="domes" <%= listing.category === 'domes' ? 'selected' : '' %>>Domes</option>
+            <option value="boats" <%= listing.category === 'boats' ? 'selected' : '' %>>Boats</option>
+          </select>
+        </div>
+        <div class="col-12 pt-2">
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-check me-1"></i>Update Listing</button>
+          <a href="/admin/listings/<%= listing._id %>" class="btn btn-outline-secondary ms-2">Cancel</a>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

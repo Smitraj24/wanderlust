@@ -47,6 +47,22 @@
 
 
          <div class="navbar-nav ms-auto">
+            <% if(currUser) { %>
+            <a class="nav-link d-flex align-items-center" href="/wishlist" title="Wishlist">
+              <i class="fa-solid fa-heart me-1"></i>
+              <span class="d-none d-md-inline">Wishlist</span>
+              <% if(typeof wishlistCount !== 'undefined' && wishlistCount > 0) { %>
+              <span class="badge bg-danger ms-1" style="font-size:0.65rem"><%= wishlistCount %></span>
+              <% } %>
+            </a>
+            <a class="nav-link d-flex align-items-center me-2" href="/cart" title="Cart">
+              <i class="fa-solid fa-cart-shopping me-1"></i>
+              <span class="d-none d-md-inline">Cart</span>
+              <% if(typeof cartCount !== 'undefined' && cartCount > 0) { %>
+              <span class="badge bg-danger ms-1" style="font-size:0.65rem"><%= cartCount %></span>
+              <% } %>
+            </a>
+            <% } %>
             <a class="nav-link" href="/listings/new">Airbnb your home</a>
                 <% if(!currUser) { %>
                 <a class="nav-link active" href="/signup"><b>Signup</b></a>
@@ -54,6 +70,9 @@
                 <% } %>
 
                 <% if(currUser) { %>
+                <% if(currUser.isAdmin) { %>
+                <a class="nav-link" href="/admin"><b>Admin</b></a>
+                <% } %>
                 <a class="nav-link" href="/logout"><b>Logout</b></a>
                 <% } %>
             </div>
